@@ -29,7 +29,7 @@ INHERITED FLAGS
   -h, --help                     Show help for command
 
 ACKNOWLEDGMENTS
-  This gh extension is inspired by https://lowcode.land/ghwrap/
+  This gh extension is inspired by https://lowcode.land/ghwrap/ and https://github.com/matsubara0507/gh-wrap
 
 $ gh recap
 GitHub CLI Recap 🚀: namidapoo's 2024 GitHub ALL Stats
