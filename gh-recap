@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+set -e
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+  -h|--help)
+    cat << EOS
+Collect your yearly GitHub all stats
+ - Commits : yearly commits count in all private/public repositories
+ - PullRequests : yearly opened pull requests count in all private/public repositories
+ - Issues : yearly closed issues count where you were assigned count in all private/public repositories
+ - NewRepos : yearly created repositories count without fork
+ - ReviewedPRs : yearly reviewed pull requests count in all private/public repositories
+
+USAGE
+  gh recap [<year>] [flags]
+
+FLAGS
+
+INHERITED FLAGS
+  -h, --help                     Show help for command
+
+ACKNOWLEDGMENTS
+  This gh extension is inspired by https://lowcode.land/ghwrap/ and https://github.com/matsubara0507/gh-wrap
+EOS
+    exit 0
+    ;;
+  * )
+    if [ -z $YYYY ]; then
+      YYYY=$1
+    fi
+    ;;
+  esac
+  shift
+done
+
+if [ -z $YYYY ]; then
+  YYYY=$(date '+%Y')
+fi
+
+LOGIN=$(gh api user --jq .login)
+
+# Commits Count
+QUERY="author:${LOGIN} author-date:${YYYY}-01-01..${YYYY}-12-31"
+COMMITS_CNT=$(gh api -X GET search/commits -f q="${QUERY}" -f per_page=1 --jq .total_count)
+
+# Opened PRs Count
+QUERY=`cat << EOS
+  query {
+    search(query: "type:pr author:${LOGIN} created:${YYYY}-01-01..${YYYY}-12-31", type: ISSUE) {
+      issueCount
+    }
+  }
+EOS
+`
+PULL_REQUESTS_CNT=$(gh api graphql -f query="${QUERY}" --jq .data.search.issueCount)
+
+# Closed Assigned Issues Count
+QUERY=`cat << EOS
+  query {
+    search(query: "type:issue assignee:${LOGIN} is:closed closed:${YYYY}-01-01..${YYYY}-12-31", type: ISSUE) {
+      issueCount
+    }
+  }
+EOS
+`
+CLOSED_ASSIGNED_ISSUES_CNT=$(gh api graphql -f query="${QUERY}" --jq .data.search.issueCount)
+
+# New Repositories Count
+QUERY=`cat << EOS
+  query {
+    search(query: "user:${LOGIN} fork:false created:${YYYY}-01-01..${YYYY}-12-31", type: REPOSITORY) {
+      repositoryCount
+    }
+  }
+EOS
+`
+NEW_REPOS_CNT=$(gh api graphql -f query="${QUERY}" --jq .data.search.repositoryCount)
+
+# Reviewed PRs Count
+QUERY=`cat << EOS
+  query {
+    search(query: "type:pr reviewed-by:${LOGIN} updated:${YYYY}-01-01..${YYYY}-12-31", type: ISSUE) {
+      issueCount
+    }
+  }
+EOS
+`
+REVIEWED_PRS_CNT=$(gh api graphql -f query="${QUERY}" --jq .data.search.issueCount)
+
+# Header
+echo "GitHub CLI Recap 🚀: ${LOGIN}'s ${YYYY} GitHub ALL Stats!"
+echo
+
+# Output in table format with borders
+{
+  printf "+----------------------+----------------------+\n"
+  printf "| Commits              | %20d |\n" ${COMMITS_CNT}
+  printf "+----------------------+----------------------+\n"
+  printf "| PullRequests         | %20d |\n" ${PULL_REQUESTS_CNT}
+  printf "+----------------------+----------------------+\n"
+  printf "| Issues               | %20d |\n" ${CLOSED_ASSIGNED_ISSUES_CNT}
+  printf "+----------------------+----------------------+\n"
+  printf "| NewRepos             | %20d |\n" ${NEW_REPOS_CNT}
+  printf "+----------------------+----------------------+\n"
+  printf "| ReviewedPRs          | %20d |\n" ${REVIEWED_PRS_CNT}
+  printf "+----------------------+----------------------+\n"
+}
