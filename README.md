@@ -1,4 +1,9 @@
-# gh-wrap
+# gh-recap
+
+This repository is a fork of https://github.com/matsubara0507/gh-wrap.
+Below are the modifications made:
+- Added Reviewed PRs count
+- Added Spinner for data fetching
 
 ```
 $ gh wrap -h
@@ -9,7 +14,7 @@ Collect your yearly GitHub all stats
  - NewRepos : yearly created repositories count without fork
 
 USAGE
-  gh wrap [<year>] [flags]
+  gh recap [<year>] [flags]
 
 FLAGS
 
@@ -19,12 +24,17 @@ INHERITED FLAGS
 ACKNOWLEDGMENTS
   This gh extension is inspired by https://lowcode.land/ghwrap/
 
-$ gh wrap
-{
-  "GitHub CLI Wrap 🚀": "matsubara0507's 2021 GitHub ALL Stats",
-  "Commits": 2638,
-  "PullRequests": 415,
-  "Issues": 111,
-  "NewRepos": 19
-}
+$ gh recap
+GitHub CLI Recap 🚀: namidapoo's 2024 GitHub ALL Stats
++----------------------+----------------------+
+| Commits              |                 2174 |
++----------------------+----------------------+
+| PullRequests         |                  347 |
++----------------------+----------------------+
+| Issues               |                  127 |
++----------------------+----------------------+
+| NewRepos             |                   60 |
++----------------------+----------------------+
+| ReviewedPRs          |                  129 |
++----------------------+----------------------+
 ```
