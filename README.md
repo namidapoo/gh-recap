@@ -12,7 +12,7 @@ Below are the modifications made:
 ![画面収録 2024-12-18 21 17 45](https://github.com/user-attachments/assets/eab8ed56-16b0-4c22-b718-4d72e7b6fd53)
 
 ```
-$ gh wrap -h
+$ gh recap -h
 Collect your yearly GitHub all stats
  - Commits : yearly commits count in all private/public repositories
  - PullRequests : yearly opened pull requests count in all private/public repositories
