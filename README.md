@@ -1,12 +1,15 @@
 This repository is a fork of https://github.com/matsubara0507/gh-wrap.
 
 Below are the modifications made:
+- Change the issue count logic
+  - `before`: Count the issues you have opened
+  - `after`: Count the issues you have been assigned to and closed
 - Added Reviewed PRs count
 - Added Spinner for data fetching
 
 # gh-recap
 
-![画面収録 2024-12-18 20 59 20](https://github.com/user-attachments/assets/1a1b49ba-01fb-47a9-bdb2-6a0de2874f79)
+![画面収録 2024-12-18 21 17 45](https://github.com/user-attachments/assets/eab8ed56-16b0-4c22-b718-4d72e7b6fd53)
 
 ```
 $ gh wrap -h
