@@ -18,6 +18,7 @@ Collect your yearly GitHub all stats
  - PullRequests : yearly opened pull requests count in all private/public repositories
  - Issues : yearly opened issues count in all private/public repositories
  - NewRepos : yearly created repositories count without fork
+ - ReviewedPRs : yearly reviewed pull requests count in all private/public repositories
 
 USAGE
   gh recap [<year>] [flags]
