@@ -38,6 +38,20 @@ if [ -z $YYYY ]; then
   YYYY=$(date '+%Y')
 fi
 
+# スピナーをバックグラウンドで起動
+spin_chars='|/-\'
+i=0
+(
+  # スピナー表示用ループ：SIGTERMでループを抜けるように
+  trap "exit" SIGTERM
+  while true; do
+    i=$(( (i+1) %4 ))
+    printf "\r${spin_chars:i:1} Fetching your GitHub stats, please wait..."
+    sleep 0.1
+  done
+) &
+SPIN_PID=$!
+
 LOGIN=$(gh api user --jq .login)
 
 # Commits Count
@@ -88,11 +102,17 @@ EOS
 `
 REVIEWED_PRS_CNT=$(gh api graphql -f query="${QUERY}" --jq .data.search.issueCount)
 
-# Header
-echo "GitHub CLI Recap 🚀: ${LOGIN}'s ${YYYY} GitHub ALL Stats!"
-echo
+# スピナー停止
+kill $SPIN_PID 2>/dev/null || true
+wait $SPIN_PID 2>/dev/null || true
 
-# Output in table format with borders
+# スピナー行クリア
+printf "\r"
+tput el
+
+# テーブル表示
+printf "GitHub CLI Recap 🚀: ${LOGIN}'s ${YYYY} GitHub ALL Stats\n"
+
 {
   printf "+----------------------+----------------------+\n"
   printf "| Commits              | %20d |\n" ${COMMITS_CNT}
