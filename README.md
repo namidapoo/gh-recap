@@ -1,9 +1,11 @@
-# gh-recap
-
 This repository is a fork of https://github.com/matsubara0507/gh-wrap.
 Below are the modifications made:
 - Added Reviewed PRs count
 - Added Spinner for data fetching
+
+# gh-recap
+
+![画面収録 2024-12-18 20 59 20](https://github.com/user-attachments/assets/1a1b49ba-01fb-47a9-bdb2-6a0de2874f79)
 
 ```
 $ gh wrap -h
